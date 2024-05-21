@@ -30,7 +30,7 @@ def callback():
 
 def generate_gpt4_response(prompt):
     response = openai.Completion.create(
-        engine="gpt-4",
+        engine="gpt-4",  # เปลี่ยนเป็น gpt-4
         prompt=prompt,
         max_tokens=150
     )
@@ -47,9 +47,6 @@ def handle_message(event):
         event.reply_token,
         TextSendMessage(text=gpt4_response)
     )
-    # เพิ่มการดีบัก
-    print(f"User message: {user_message}")
-    print(f"GPT-4 response: {gpt4_response}")
 
 if __name__ == "__main__":
     app.run(debug=True)
