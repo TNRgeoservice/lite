@@ -30,7 +30,7 @@ def callback():
 
 def generate_gpt4_response(prompt):
     response = openai.Completion.create(
-        engine="gpt-4",  # เปลี่ยนเป็น gpt-4
+        engine="gpt-4",
         prompt=prompt,
         max_tokens=150
     )
