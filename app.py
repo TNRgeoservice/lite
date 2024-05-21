@@ -1,16 +1,22 @@
 from flask import Flask, request, abort
 import os
+import openai
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 app = Flask(__name__)
 
+# รับค่า Environment Variables สำหรับ LINE API
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("ooo6bXW1SokScQJ62nyCadW3j1vdmlLlCE1C7bodbsXDSCg1ojkRiz+8CV6oTMhniE+EdbB1aYSrTnq6M3t7PEgn26Nd6fTpLHbFYlFmrRaGc0wEdBi8HOVwgFQZ3+XnmbWTQiXZWxbkz/wpJveJPQdB04t89/1O/w1cDnyilFU=")
 LINE_CHANNEL_SECRET = os.getenv("e4b63a1dd4c9cd09bd74fc2309f66262")
 
 line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
+
+# รับค่า Environment Variables สำหรับ OpenAI API
+OPENAI_API_KEY = os.getenv("sk-tnr-gpt-TPp1hAYKOL1wZTQtmhqBT3BlbkFJsrHqN93Sr63RLZ4Tayxi")
+openai.api_key = OPENAI_API_KEY
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -22,11 +28,12 @@ def callback():
         abort(400)
     return 'OK'
 
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=event.message.text))
+def generate_gpt4_response(prompt):
+    response = openai.Completion.create(
+        engine="gpt-4",  # เปลี่ยนเป็น gpt-4
+        prompt=prompt,
+        max_tokens=150
+    )
+    return response.choices[0].text.strip()
 
-if __name__ == "__main__":
-    app.run()
+@handler.add(Messa
