@@ -50,3 +50,18 @@ def handle_message(event):
 
 if __name__ == "__main__":
     app.run(debug=True)
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    user_message = event.message.text
+    try:
+        gpt4_response = generate_gpt4_response(user_message)
+    except Exception as e:
+        gpt4_response = str(e)
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextSendMessage(text=gpt4_response)
+    )
+    # เพิ่มการดีบัก
+    print(f"User message: {user_message}")
+    print(f"GPT-4 response: {gpt4_response}")
